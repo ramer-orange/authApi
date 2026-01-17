@@ -70,6 +70,15 @@ router.get('/users/:user_id', basicAuth, async (req, res) => {
   try {
     const { user_id } = req.params;
 
+    // user_id バリデーション
+    const userIdValidation = validateUserId(user_id);
+    if (!userIdValidation.valid) {
+      return res.status(400).json({
+        message: 'Bad Request',
+        cause: userIdValidation.cause
+      });
+    }
+
     // ユーザー情報取得
     const result = await pool.query(
       'SELECT user_id, nickname, comment FROM users WHERE user_id = $1',
@@ -112,6 +121,15 @@ router.patch('/users/:user_id', basicAuth, async (req, res) => {
   try {
     const { user_id } = req.params;
     const { nickname, comment, user_id: bodyUserId, password } = req.body;
+
+    // user_id バリデーション
+    const userIdValidation = validateUserId(user_id);
+    if (!userIdValidation.valid) {
+      return res.status(400).json({
+        message: 'Bad Request',
+        cause: userIdValidation.cause
+      });
+    }
 
     // 認証ユーザーとパスパラメータの一致確認
     if (req.authenticatedUserId !== user_id) {
