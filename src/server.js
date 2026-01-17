@@ -14,11 +14,6 @@ app.use(express.json());
 // ルーティング
 app.use('/', usersRouter);
 
-// ルートへのアクセス
-app.get('/', (req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
-
 // サーバー起動
 const startServer = async () => {
   try {
