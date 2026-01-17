@@ -20,7 +20,7 @@ const validatePassword = (password) => {
   if (password.length < 8 || password.length > 20) {
     return { valid: false, cause: 'Input length is incorrect' };
   }
-  // ASCII 33-126 (空白32と制御コード0-31, 127を除く印字可能文字)
+  // ASCII 33-126
   if (!/^[\x21-\x7E]+$/.test(password)) {
     return { valid: false, cause: 'Incorrect character pattern' };
   }

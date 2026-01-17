@@ -14,9 +14,9 @@ app.use(express.json());
 // ルーティング
 app.use('/', usersRouter);
 
-// ヘルスチェック用エンドポイント
+// ルートへのアクセス
 app.get('/', (req, res) => {
-  res.json({ status: 'API server is running' });
+  res.status(200).json({ status: 'ok' });
 });
 
 // サーバー起動

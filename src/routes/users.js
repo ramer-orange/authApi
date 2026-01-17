@@ -65,7 +65,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// GET /users/:user_id - ユーザー情報取得（認証あり）
+// GET /users/{user_id} - ユーザー情報取得
 router.get('/users/:user_id', basicAuth, async (req, res) => {
   try {
     const { user_id } = req.params;
