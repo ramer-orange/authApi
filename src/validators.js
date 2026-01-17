@@ -32,6 +32,9 @@ const validateNickname = (nickname) => {
   if (nickname === undefined || nickname === null) {
     return { valid: true }; // 任意項目
   }
+  if (typeof nickname !== 'string') {
+    return { valid: false, cause: 'Invalid nickname value' };
+  }
   if (nickname.length > 30) {
     return { valid: false, cause: 'String length limit exceeded or containing' };
   }

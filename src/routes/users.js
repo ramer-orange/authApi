@@ -177,8 +177,8 @@ router.patch('/users/:user_id', basicAuth, async (req, res) => {
     let valueIndex = 1;
 
     if (nickname !== undefined) {
-      // 空文字の場合は user_id に戻す
-      const newNickname = nickname === '' ? user_id : nickname;
+      // 空文字または null の場合は user_id に戻す
+      const newNickname = (nickname === '' || nickname === null) ? user_id : nickname;
       updateQuery += `nickname = $${valueIndex}, `;
       updateValues.push(newNickname);
       valueIndex++;
