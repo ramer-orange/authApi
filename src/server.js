@@ -1,3 +1,6 @@
+// 環境変数の読み込み
+require('dotenv').config();
+
 const express = require('express');
 const { initDB } = require('./db');
 const usersRouter = require('./routes/users');

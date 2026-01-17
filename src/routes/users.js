@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { pool } = require('../db');
 const { validateUserId, validatePassword } = require('../validators');
+const { basicAuth } = require('../auth');
 
 const router = express.Router();
 
@@ -58,6 +59,48 @@ router.post('/signup', async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error);
+    res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
+
+// GET /users/:user_id - ユーザー情報取得（認証あり）
+router.get('/users/:user_id', basicAuth, async (req, res) => {
+  try {
+    const { user_id } = req.params;
+
+    // ユーザー情報取得
+    const result = await pool.query(
+      'SELECT user_id, nickname, comment FROM users WHERE user_id = $1',
+      [user_id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: 'No user found'
+      });
+    }
+
+    const user = result.rows[0];
+
+    // レスポンス構築（commentがNULLの場合は省略）
+    const response = {
+      message: 'User details by user_id',
+      user: {
+        user_id: user.user_id,
+        nickname: user.nickname
+      }
+    };
+
+    // commentが存在する場合のみ追加
+    if (user.comment !== null) {
+      response.user.comment = user.comment;
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Get user error:', error);
     res.status(500).json({
       message: 'Internal server error'
     });
